@@ -119,7 +119,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="in ra, không gửi, không lưu state")
     ap.add_argument("--any-time", action="store_true", help="bỏ qua kiểm tra khung giờ")
+    ap.add_argument("--test", action="store_true", help="gửi 1 tin thử rồi thoát")
     args = ap.parse_args()
+
+    if args.test:
+        notify("✅ vn-volume-alert: kết nối Discord OK")
+        return
 
     if not (args.any_time or in_window()):
         print("Ngoài khung giờ, bỏ qua.")

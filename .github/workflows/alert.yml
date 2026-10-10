@@ -5,6 +5,11 @@ on:
     # 02:30-04:00 UTC = 09:30-11:00 giờ VN, T2-T6, mỗi 5 phút
     - cron: "*/5 2-4 * * 1-5"
   workflow_dispatch:
+    inputs:
+      test:
+        description: "Gửi 1 tin thử rồi thoát"
+        type: boolean
+        default: false
 
 concurrency:
   group: volume-alert
@@ -30,7 +35,7 @@ jobs:
       - name: Run alert
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: python3 alert.py
+        run: python3 alert.py ${{ inputs.test && '--test' || '' }}
 
       - name: Save cache
         if: always()
