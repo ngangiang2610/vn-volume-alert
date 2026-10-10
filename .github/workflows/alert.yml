@@ -1,0 +1,42 @@
+name: volume-alert
+
+on:
+  schedule:
+    # 02:30-04:00 UTC = 09:30-11:00 giờ VN, T2-T6, mỗi 5 phút
+    - cron: "*/5 2-4 * * 1-5"
+  workflow_dispatch:
+
+concurrency:
+  group: volume-alert
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore cache (TB20 + state)
+        uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: |
+            avg20.json
+            state.json
+          key: data-${{ github.run_id }}
+          restore-keys: data-
+
+      - name: Run alert
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python3 alert.py
+
+      - name: Save cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            avg20.json
+            state.json
+          key: data-${{ github.run_id }}
