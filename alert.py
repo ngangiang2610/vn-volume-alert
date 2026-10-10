@@ -12,7 +12,7 @@ from pathlib import Path
 
 RATIO = float(os.environ.get("RATIO", "0.5"))
 MIN_AVG_VOL = int(os.environ.get("MIN_AVG_VOL", "200000"))
-WINDOW = ("09:30", "11:00")
+WINDOW = ("09:15", "11:00")
 EXCHANGES = ("hose", "hnx")
 VN_TZ = timezone(timedelta(hours=7))
 HERE = Path(__file__).parent
